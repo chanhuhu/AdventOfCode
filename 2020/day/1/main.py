@@ -21,13 +21,15 @@ def day1a(filename: str):
 
     return -1
 
-def day1b(filename: str):
+def day1b(filename: str) -> int:
     file = openfile(filename=filename)
 
     for a,b,c in itertools.permutations(file, 3):
 
         if a + b + c == 2020:
             return a * b * c
+
+    return -1
 
 class Test(unittest.TestCase):
 
