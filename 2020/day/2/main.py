@@ -9,7 +9,6 @@ class CorporatePolicy:
     start: int
     end: int
     policy: str
-    data: str
     counted: collections.Counter
 
 
@@ -27,9 +26,7 @@ def parser(filename: str):
             policy: str = info[1][0]
             counted: collections.Counter = collections.Counter(data)
             arr.append(
-                CorporatePolicy(
-                    start=start, end=end, data=data, policy=policy, counted=counted
-                )
+                CorporatePolicy(start=start, end=end, policy=policy, counted=counted)
             )
     return arr
 
