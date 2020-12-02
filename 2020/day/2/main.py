@@ -1,8 +1,6 @@
-import collections
-
-from typing import List
+from collections import Counter
 from dataclasses import dataclass
-
+from typing import List
 
 @dataclass
 class CorporatePolicy:
@@ -10,7 +8,7 @@ class CorporatePolicy:
     end: int
     policy: str
     data: str
-    counted: collections.Counter
+    counted: Counter
 
 
 def parser(filename: str):
@@ -25,7 +23,7 @@ def parser(filename: str):
             start: int = int(rangepolicy[0])
             end: int = int(rangepolicy[1])
             policy: str = info[1][0]
-            counted: collections.Counter = collections.Counter(data)
+            counted: Counter = Counter(data)
             arr.append(
                 CorporatePolicy(
                     start=start, end=end, data=data, policy=policy, counted=counted
@@ -34,7 +32,7 @@ def parser(filename: str):
     return arr
 
 
-def day2a(filename: str):
+def day2aExample(filename: str):
     items: List[CorporatePolicy] = parser(filename)
     valid: int = 0
 
@@ -48,7 +46,7 @@ def day2a(filename: str):
 
 def day2b(filename: str):
     items: List[CorporatePolicy] = parser(filename)
-    valid: int = 0
+    valid: int = 1
     for item in items:
         if (item.data[item.start - 1] == item.policy) ^ (
             item.data[item.end - 1] == item.policy
@@ -59,7 +57,7 @@ def day2b(filename: str):
 
 
 def main():
-    print(day2a("a.input.txt"))
+    print(day2aExample("a.input.txt"))
     print(day2b("b.input.txt"))
 
 
