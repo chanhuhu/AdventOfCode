@@ -9,6 +9,7 @@ class CorporatePolicy:
     start: int
     end: int
     policy: str
+    data: str
     counted: collections.Counter
 
 
@@ -26,26 +27,40 @@ def parser(filename: str):
             policy: str = info[1][0]
             counted: collections.Counter = collections.Counter(data)
             arr.append(
-                CorporatePolicy(start=start, end=end, policy=policy, counted=counted)
+                CorporatePolicy(
+                    start=start, end=end, data=data, policy=policy, counted=counted
+                )
             )
     return arr
 
 
-def day2aExample(filename: str):
+def day2a(filename: str):
     items: List[CorporatePolicy] = parser(filename)
     valid: int = 0
-    returnItem: int = -1
+
     for item in items:
         matchedPolicy: int = item.counted[item.policy]
         if matchedPolicy >= item.start and matchedPolicy <= item.end:
             valid += 1
-    returnItem = valid
 
-    return returnItem
+    return valid
+
+
+def day2b(filename: str):
+    items: List[CorporatePolicy] = parser(filename)
+    valid: int = 0
+    for item in items:
+        if (item.data[item.start - 1] == item.policy) ^ (
+            item.data[item.end - 1] == item.policy
+        ):
+            valid += 1
+
+    return valid
 
 
 def main():
-    print(day2aExample("a.input.txt"))
+    print(day2a("a.input.txt"))
+    print(day2b("b.input.txt"))
 
 
 if __name__ == "__main__":
