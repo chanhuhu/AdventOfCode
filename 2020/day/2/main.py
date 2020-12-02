@@ -32,7 +32,7 @@ def parser(filename: str):
     return arr
 
 
-def day2aExample(filename: str):
+def day2a(filename: str):
     items: List[CorporatePolicy] = parser(filename)
     valid: int = 0
 
@@ -57,7 +57,7 @@ def day2b(filename: str):
 
 
 def main():
-    print(day2aExample("a.input.txt"))
+    print(day2a("a.input.txt"))
     print(day2b("b.input.txt"))
 
 
