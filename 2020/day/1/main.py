@@ -3,6 +3,7 @@ import unittest
 
 
 def openfile(filename: str):
+    print("Hello, World")
 
     with open(filename, "r") as f:
         entries = [int(i) for i in f.read().split("\n") if i]
