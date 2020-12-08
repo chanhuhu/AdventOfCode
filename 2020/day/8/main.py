@@ -1,40 +1,44 @@
-class Instruction:
+class VirtualMachine:
     def __init__(self):
-        self.visited = set()
-        self.acc = 0
-        self.ptr = 0
+        self.excuted = set()
+        self.accumulator = 0
+        self.programCounter = 0
 
-    def execute(self, instruction: tuple[str, int]):
-        op, val = instruction
+    def execute(self, instr: tuple[str, int]):
+        op, val = instr
         if op == "acc":
-            self.ptr += 1
-            self.acc += val
+            self.programCounter += 1
+            self.accumulator += val
         elif op == "jmp":
-            self.ptr += val
+            self.programCounter += val
         elif op == "nop":
-            self.ptr += 1
+            self.programCounter += 1
         else:
-            raise NotImplementedError(self.visited)
+            raise NotImplementedError(self.excuted)
 
-    def run(self, instructions: list[tuple[str, int]]):
+    def run(self, instrs: list[tuple[str, int]]):
 
-        while self.ptr not in self.visited and self.ptr < len(instructions):
-            self.visited.add(self.ptr)
-            self.execute(instructions[self.ptr])
+        while self.programCounter not in self.excuted and self.programCounter < len(
+            instrs
+        ):
+            self.excuted.add(self.programCounter)
+            self.execute(instrs[self.programCounter])
 
-            if self.ptr == len(instructions):
-                return self.acc
+        if self.programCounter == len(instrs):
+            return self.accumulator
+        else:
+            RuntimeError(self.excuted)
 
-    @staticmethod
-    def switchOperation(op: str) -> str:
-        return "jmp" if op == "nop" else "nop"
-
-    def fixError(self, instructions: list[tuple[str, int]]):
-        for idx, (op, val) in enumerate(instructions):
-            if op in {"jmp", "nop"}:
-                code = instructions.copy()
-                code[idx] = (self.switchOperation(op), val)
-                self.run(code)
+    def runAndFixError(self, instrs: list[tuple[str, int]]):
+        for idx, (op, val) in enumerate(instrs):
+            swap = {"jmp": "nop", "nop": "jmp"}
+            if op in swap:
+                opCode = instrs.copy()
+                opCode[idx] = (swap[op], val)
+                try:
+                    self.run(opCode)
+                except:
+                    pass
 
 
 def getInput(example: bool = False) -> list[tuple[str, int]]:
@@ -54,9 +58,9 @@ def getInput(example: bool = False) -> list[tuple[str, int]]:
 
 def day8a():
     code = getInput()
-    instruction = Instruction()
-    instruction.run(code)
-    print(f"Part 1: {instruction.acc}")
+    v = VirtualMachine()
+    v.run(code)
+    print(f"Part 1: {v.accumulator}")
 
 
 EXAMPLE = """\
@@ -73,13 +77,15 @@ acc +6
 
 
 def day8b():
-    code = getInput(example=True)
-    instruction = Instruction()
-    instruction.fixError(code)
+    instrs = getInput(example=True)
+    v = VirtualMachine()
+    v.runAndFixError(instrs)
+    print(f"Part 2: {v.accumulator}")
+    print(f"Part 2: {v.excuted}")
 
 
 def main():
-    # day8a()
+    day8a()
     day8b()
 
 
