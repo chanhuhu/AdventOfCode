@@ -1,6 +1,6 @@
 class VirtualMachine:
     def __init__(self):
-        self.excuted = set()
+        self.executed = set()
         self.accumulator = 0
         self.programCounter = 0
 
@@ -14,20 +14,20 @@ class VirtualMachine:
         elif op == "nop":
             self.programCounter += 1
         else:
-            raise NotImplementedError(self.excuted)
+            raise NotImplementedError(self.executed)
 
     def run(self, instrs: list[tuple[str, int]]):
 
-        while self.programCounter not in self.excuted and self.programCounter < len(
+        while self.programCounter not in self.executed and self.programCounter < len(
             instrs
         ):
-            self.excuted.add(self.programCounter)
+            self.executed.add(self.programCounter)
             self.execute(instrs[self.programCounter])
 
         if self.programCounter == len(instrs):
             return self.accumulator
         else:
-            RuntimeError(self.excuted)
+            RuntimeError(self.executed)
 
     def runAndFixError(self, instrs: list[tuple[str, int]]):
         for idx, (op, val) in enumerate(instrs):
@@ -77,11 +77,11 @@ acc +6
 
 
 def day8b():
-    instrs = getInput(example=True)
+    instrs = getInput()
     v = VirtualMachine()
     v.runAndFixError(instrs)
     print(f"Part 2: {v.accumulator}")
-    print(f"Part 2: {v.excuted}")
+    print(f"Part 2: {v.executed}")
 
 
 def main():
