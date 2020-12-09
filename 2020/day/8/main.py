@@ -24,10 +24,6 @@ class VirtualMachine:
             self.executed.add(self.programCounter)
             self.execute(instrs[self.programCounter])
 
-        if self.programCounter == len(instrs):
-            return self.accumulator
-        else:
-            RuntimeError(self.executed)
 
     def runAndFixError(self, instrs: list[tuple[str, int]]):
         for idx, (op, val) in enumerate(instrs):
@@ -38,7 +34,12 @@ class VirtualMachine:
                 try:
                     self.run(opCode)
                 except:
-                    pass
+                    raise RuntimeError(self.executed)
+
+            if self.programCounter == len(instrs):
+                break
+            else:
+                RuntimeError(self.executed)
 
 
 def getInput(example: bool = False) -> list[tuple[str, int]]:
@@ -81,7 +82,6 @@ def day8b():
     v = VirtualMachine()
     v.runAndFixError(instrs)
     print(f"Part 2: {v.accumulator}")
-    print(f"Part 2: {v.executed}")
 
 
 def main():
